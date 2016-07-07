@@ -1,0 +1,58 @@
+<html lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>INSPINIA Admin | Login</title>
+
+    <?=$this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath('/admin/img/favicon.ico')))
+        ->appendStylesheet($this->basePath('css/login-core.css'))
+    //        ->appendStylesheet($this->basePath('css/bootstrap.min.css'))
+    //        ->appendStylesheet($this->basePath('css/font-awesome.min.css'))
+    //        ->appendStylesheet($this->basePath('admin/css/plugins/toastr/toastr.css'))
+    //        ->appendStylesheet($this->basePath('admin/css/animate.css'))
+    //        ->appendStylesheet($this->basePath('admin/css/inspinia.css'))
+    ?>
+</head>
+
+<body class="gray-bg">
+
+<div class="middle-box text-center loginscreen animated fadeInDown">
+    <div>
+        <div>
+            <h1 class="logo-name">IN+</h1>
+        </div>
+        <? /* @var $loginForm \Zend\Form\Form */ ?>
+        <?=$this->form($loginForm, TwbBundle\Form\View\Helper\TwbBundleForm::LAYOUT_HORIZONTAL);?>
+    </div>
+</div>
+<div id="LitLSExit" class="animated fadeInLeftBig" >
+    <a href="<?=$this->url('home'); ?>">
+        <i class="fa fa-reply "></i> На сайт
+    </a>
+</div>
+
+<?=$this->headScript()
+    ->prependFile($this->basePath('js/login-core.js'))
+//    ->prependFile($this->basePath('js/bootstrap.min.js'))
+//    ->prependFile($this->basePath('js/jquery.min.js'))
+//    ->prependFile($this->basePath('admin/js/plugins/toastr/toastr.min.js'))
+?>
+<? if (isset($authErrors['auth'])): ?>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            setTimeout(function () {
+                toastr.options = {
+                    closeButton: true,
+                    showDuration: "slow",
+                    hideDuration: "slow",
+                    timeOut: 10000,
+                    extendedTimeOut: 10000
+                };
+                toastr.error("<?=$authErrors['auth']; ?>", 'Ошибка авторизации');
+
+            }, 1000);
+        });
+    </script>
+<? endif; ?>
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+<?
+/* @var $user \Users\Entity\User */
+$user = $this->identity();
+
+$this->headTitle('Группы параметров');
+$this->headTitle('Настройки');
+?>
+<? if ($user->getUserRoleID() == \Users\Entity\User::ADMIN_ROLE) $this->headScript()->appendFile($this->basePath('admin/js/groups.js')); ?>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <? if ($user->getUserRoleID() == \Users\Entity\User::ADMIN_ROLE): ?>
+                    <noscript>
+                        <a href="<?=$this->url('admin-settings', ['action' => 'addgroup']); ?>" class="btn btn-primary btn-xs">
+                            <span class="glyphicon glyphicon-plus"></span>
+                            Добавить группу
+                        </a>
+                    </noscript>
+                <? endif; ?>
+                <div class="modal inmodal fade" id="litAddGroup" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <i class="fa fa-users modal-icon"></i>
+                                <h4 class="modal-title">Добавить группу</h4>
+                            </div>
+                            <form id="litAddGroupForm" method="post" action="<?=$this->url('admin-settings', ['action' => 'addgroup']); ?>">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="name">Имя группы</label>
+                                        <input type="text" class="form-control" id="name" name="name" value="" placeholder="Имя группы">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-white" data-dismiss="modal">Закрыть</button>
+                                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-tools">
+                    <a class="collapse-link" data-toggle="tooltip" data-placement="top" data-original-title="Свернуть">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="close-link" data-toggle="tooltip" data-placement="top" data-original-title="Закрыть">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="table-responsive">
+                    <table id="litSettingsGroup" class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Имя группы</th>
+                            <? if ($user->getUserRoleID() == \Users\Entity\User::ADMIN_ROLE): ?>
+                                <th>Редактировать</th>
+                            <? endif; ?>
+                        </tr>
+                        </thead>
+                        <tbody<?=($user->getUserRoleID() == \Users\Entity\User::ADMIN_ROLE) ? ' class="ui-sortable" action="' .
+                            $this->url('admin-settings', ['action' => 'groupssort']) . '"' : ''; ?>>
+                        <? /* @var $group \Settings\Entity\Groups */ ?>
+                        <? foreach($groups as $group): ?>
+                            <tr>
+                                <th scope="row"><?=$group->getGroupID(); ?></th>
+                                <td class="litEditGroup">
+                                    <span class="litGroupName"><?=$group->getName(); ?></span>
+                                    <? if ($user->getUserRoleID() == \Users\Entity\User::ADMIN_ROLE): ?>
+                                        <form method="post" action="<?=$this->url('admin-settings', ['action' => 'editgroup', 'id' => $group->getGroupID()]); ?>" style="display: none;">
+                                            <div class="input-group input-group-sm">
+                                                <input type="text" class="form-control" name="name" value="<?=$group->getName(); ?>">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-default litCloseEditGroup" type="button" style="border-radius: 0;">Отмена</button>
+                                                </span>
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-primary" type="submit">Сохранить</button>
+                                                </span>
+                                            </div>
+                                        </form>
+                                    <? endif; ?>
+                                </td>
+                                <? if ($user->getUserRoleID() == \Users\Entity\User::ADMIN_ROLE): ?>
+                                    <td class="litEditGroupCell">
+                                        <a
+                                            href="<?=$this->url('admin-settings', ['action' => 'editgroup', 'id' => $group->getGroupID()])?>"
+                                            class="btn btn-primary btn-xs litEditGroup"
+                                            title="Редактировать <?=$group->getName()?>"
+                                            >
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </a>
+                                    </td>
+                                <? endif; ?>
+                            </tr>
+                        <? endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,59 @@
+<?
+$this->headTitle('Страницы');
+?>
+<div class="ibox">
+    <div class="ibox-title">
+        <h5>Статические страницы</h5>
+        <div class="ibox-tools">
+            <a href="<?=$this->url('admin-pages', ['action' => 'addpage'])?>" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Создать новую страницу</a>
+        </div>
+    </div>
+    <div class="ibox-content">
+        <div class="project-list">
+            <table class="table table-hover">
+                <tbody>
+                <? if (count($pages) == 0): ?>
+                    <tr>
+                        <td style="text-align: center;">
+                            Ни одной страницы пока не созданно.
+                        </td>
+                    </tr>
+                <? else: ?>
+                    <? /* @var $page \Pages\Entity\Pages */ ?>
+                    <? foreach ($pages as $page): ?>
+                        <tr>
+                            <td>
+                                <? if ($page->getActive()) {
+                                    $status = 'Активна';
+                                    $activeClass = 'label-primary';
+                                } else {
+                                    $status = 'Не активна';
+                                    $activeClass = 'label-default';
+                                }
+                                ?>
+                                <span class="label <?=$activeClass?>"><?=$status?></span>
+                            </td>
+                            <td class="project-title">
+                                <h4><?=$page->getName(); ?></h4>
+                                <small>Создана <?=date_format($page->getDate(), 'd.m.Y  H:i:s'); ?></small>
+                            </td>
+                            <td class="project-alias">
+                                <b>Адрес страницы:</b><br>
+                                <small><a href="<?=$this->url('pages', ['alias' => $page->getAlias()]);?>" target="_blank"><?=$this->url('pages', ['alias' => $page->getAlias()]);?></a></small>
+                            </td>
+                            <td class="project-content-preview">
+                                <small><?=(mb_strlen($page->getContent()) > 432) ? mb_substr(strip_tags($page->getContent()), 0, 432) . '.....' : strip_tags($page->getContent()); ?></small>
+                            </td>
+                            <td class="project-actions">
+                                <a href="<?=$this->url('admin-pages', ['action' => 'pagepreview', 'id' => $page->getPageId()])?>" class="btn btn-info btn-sm"><i class="fa fa-eye"></i> Предпросмотр</a>
+                                <a href="<?=$this->url('admin-pages', ['action' => 'editpage', 'id' => $page->getPageId()])?>" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i> Редактировать</a>
+                                <a href="<?=$this->url('admin-pages', ['action' => 'deletepage', 'id' => $page->getPageId()])?>" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Удалить</a>
+                            </td>
+                        </tr>
+                    <? endforeach; ?>
+                <? endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

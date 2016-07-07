@@ -1,0 +1,49 @@
+<? $currBreadCrumb = $this->viewModel()->getRoot()->currBreadCrumb; ?>
+<ol id="breadcrumbs" class="breadcrumb">
+    <? if ((count($pages) == 1 && $pages[0]->getRoute() == 'admin') || count($pages) == 0): ?>
+        <? if (($currBreadCrumb) != null): ?>
+            <li><a href="<?=$this->url('admin')?>"><i class="fa fa-th-large"></i> Главная</a></li>
+            <li class="text-navy">
+                <? if($currBreadCrumb['icon'] != null) echo '<i class="' . $currBreadCrumb['icon'] . '"></i>' ?>
+                <strong><?=$currBreadCrumb['label']; ?></strong>
+            </li>
+        <?  else: ?>
+            <li class="text-navy"><i class="fa fa-dashboard"></i> <strong>Главная</strong></li>
+        <? endif;  ?>
+    <? elseif (count($pages) > 0): ?>
+        <li><a href="<?=$this->url('admin')?>"><i class="fa fa-th-large"></i> Главная</a></li>
+        <? foreach ($pages as $key => $page): ?>
+            <? if ($key < count($this->pages) - 1): ?>
+                <? if ($page->getHref() == '#'): ?>
+                    <li>
+                        <? if($page->get('icon') != null) echo '<i class="' . $page->get('icon') . '"></i>' ?>
+                        <strong><?=$page->getLabel(); ?></strong>
+                    </li>
+                <? else: ?>
+                    <li>
+                        <a href="<?=$page->getHref(); ?>">
+                            <? if($page->get('icon') != null) echo '<i class="' . $page->get('icon') . '"></i>' ?>
+                            <?=$page->getLabel(); ?>
+                        </a>
+                    </li>
+                <? endif; ?>
+            <? elseif (($currBreadCrumb) != null): ?>
+                <li>
+                    <a href="<?=$page->getHref(); ?>">
+                        <? if($page->get('icon') != null) echo '<i class="' . $page->get('icon') . '"></i>' ?>
+                        <?=$page->getLabel(); ?>
+                    </a>
+                </li>
+                <li class="text-navy">
+                    <? if($currBreadCrumb['icon'] != null) echo '<i class="' . $currBreadCrumb['icon'] . '"></i>' ?>
+                    <strong><?=$currBreadCrumb['label']; ?></strong>
+                </li>
+            <? else: ?>
+                <li class="text-navy">
+                    <? if($page->get('icon') != null) echo '<i class="' . $page->get('icon') . '"></i>' ?>
+                    <strong><?=$page->getLabel(); ?></strong>
+                </li>
+            <? endif; ?>
+        <? endforeach; ?>
+    <? endif; ?>
+</ol>

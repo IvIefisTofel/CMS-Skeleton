@@ -1,0 +1,84 @@
+<?
+$this->headTitle('Почта');
+
+$this->setCurrentNavigationPage('adminPanel', 'admin-mail');
+$this->addCurrentBreadCrumb('Сообщение', 'fa fa-envelope-o');
+
+$this->headScript()->appendFile($this->basePath('admin/js/mail.js'));
+/* @var $mail \Emails\Entity\Email */
+?>
+<script>
+    var important = {
+        id: 'flag-<?=\Emails\Entity\Email::$arrTypes[\Emails\Entity\Email::TYPE_IMPORTANT]['name']; ?>',
+        colorClass: '<?=\Emails\Entity\Email::$arrTypes[\Emails\Entity\Email::TYPE_IMPORTANT]['colorClass']; ?>',
+        text: '<?=\Emails\Entity\Email::$arrTypes[\Emails\Entity\Email::TYPE_IMPORTANT]['text']; ?>'
+    };
+</script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="mail-box-header">
+            <div class="pull-right">
+                <a href="<?=$this->url('admin-mail'); ?>" class="btn btn-white btn-sm"><i class="fa fa-reply"></i> Назад</a>
+                <a href="<?=$this->url('admin-mail', ['action' => 'deleteMessage', 'id' => $mail->getId()]); ?>"
+                   class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="bottom" title="Удалить"><i class="fa fa-trash-o"></i></a>
+            </div>
+            <h2>
+                Текст сообщения
+            </h2>
+            <div class="mail-tools m-t-md">
+                <h3>
+                    <span class="font-noraml">Тема: </span><?=$mail->getSubject(); ?>
+                </h3>
+                <h5>
+                    <span class="pull-right font-noraml" data-toggle="tooltip" data-placement="left" title="<?=date_format($mail->getDate(), 'H:i:s'); ?>">
+                        <?=date_format($mail->getDate(), 'd.m.Y'); ?>
+                    </span>
+                    <? if ($mail->getSenderName() != \Emails\Entity\Email::SYSTEM_MESSAGE || $mail->getSenderEmail() != \Emails\Entity\Email::SYSTEM_MESSAGE): ?>
+                        <span class="font-noraml">От: </span>
+                        <?=($mail->getSenderName() != \Emails\Entity\Email::SYSTEM_MESSAGE) ? $mail->getSenderName() : ''; ?>
+                        <? if ($mail->getSenderEmail() != \Emails\Entity\Email::SYSTEM_MESSAGE): ?>
+                            <a href="mailto:<?=$mail->getSenderEmail(); ?>"><?=$mail->getSenderEmail(); ?></a>
+                        <? endif; ?>
+                    <? else: ?>
+                        <span class="font-noraml">Системное сообщение:</span>
+                        <?=$mail->getFromUrl()?>
+                    <? endif; ?>
+                </h5>
+                <h2>
+                    <? $important = isset($mail->getFlags()[\Emails\Entity\Email::TYPE_IMPORTANT]); ?>
+                    <a id="setImportant" href="#" class="btn btn-circle <?=$important ? 'btn-warning' : 'btn-white'; ?>"
+                       data-id="<?=$mail->getId(); ?>" data-toggle="tooltip" data-placement="right"
+                       data-href="<?=$this->url('admin-mail', ['action' => 'ajax']);?>"
+                       title="<?=$important ? "Снять отметку важное" : "Отметить как важное"; ?>"><i class="fa fa-star"></i></a>
+                    <? if (count($mail->getFlags())): ?>
+                        <div id="flagsContainer" class="pull-right">
+                            <? foreach ($mail->getFlags() as $flagId => $value): ?>
+                                <span id="flag-<?=\Emails\Entity\Email::$arrTypes[$flagId]['name'];
+                                ?>" class="label label-<?=\Emails\Entity\Email::$arrTypes[$flagId]['colorClass'];
+                                ?>"><?=\Emails\Entity\Email::$arrTypes[$flagId]['text']; ?></span>
+                            <? endforeach; ?>
+                        </div>
+                    <? endif; ?>
+                </h2>
+            </div>
+        </div>
+        <div class="mail-box">
+
+
+            <div class="mail-body">
+                <? if ($mail->getTypeId() == \Emails\Entity\Email::TYPE_ERROR): ?>
+                    <?=$mail->getMessage(); ?>
+                <? else: ?>
+                    <pre class="mail-text"><?=$mail->getMessage(); ?></pre>
+                <? endif; ?>
+            </div>
+            <div class="mail-body text-right">
+                <a href="<?=$this->url('admin-mail'); ?>" class="btn btn-white btn-sm"><i class="fa fa-reply"></i> Назад</a>
+                <a href="<?=$this->url('admin-mail', ['action' => 'deleteMessage', 'id' => $mail->getId()]); ?>" class="btn btn-sm btn-white">
+                    <i class="fa fa-trash-o"></i> Удалить
+                </a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>

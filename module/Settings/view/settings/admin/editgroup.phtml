@@ -1,0 +1,76 @@
+<?
+$this->headTitle(($group->getGroupID() == null) ? 'Добавить группу' : 'Редактировать группу');
+$this->headTitle('Группы параметров');
+$this->headTitle('Настройки');
+
+$this->setCurrentNavigationPage('adminPanel', 'admin-settings', ['action' => 'groups']);
+$this->addCurrentBreadCrumb(($group->getGroupID() == null) ? 'Добавить группу' : 'Редактировать группу', ($group->getGroupID() == null) ? 'fa fa-plus' : 'fa fa-pencil');
+?>
+<? /* @var $group \Settings\Entity\Groups */ ?>
+<div class="row">
+    <div class="col-lg-12">
+        <? if ($error && isset($arrErrorsTexts['main']) > 0): ?>
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    Ошибка сохранения
+                    <a class="close-link pull-right">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+                <div class="panel-body">
+                    <a href="<?=$this->url('admin-settings', ['action' => 'groups']); ?>" class="btn btn-outline btn-danger pull-right" type="button"><i class="fa fa-reply"></i> Назад</a>
+                    <? foreach ($arrErrorsTexts['main'] as $mError): ?>
+                        <p><?=$mError?></p>
+                    <? endforeach; ?>
+                </div>
+            </div>
+        <? else: ?>
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5><?=($group->getGroupID() == null) ? 'Добавить группу' : 'Редактировать группу'; ?></h5>
+                <div class="ibox-tools">
+                    <a href="<?=$this->url('admin-settings', ['action' => 'groups'])?>" class="btn btn-default btn-xs" style="color: #fff;">
+                        <span class="glyphicon glyphicon-arrow-left"></span>
+                        Назад
+                    </a>
+                    <a class="collapse-link" data-toggle="tooltip" data-placement="top" data-original-title="Свернуть">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="close-link" data-toggle="tooltip" data-placement="top" data-original-title="Закрыть">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <? $action = ($group->getGroupID() == null) ? 'add_group' : 'edit_group'; ?>
+                <form method="post" class="form-horizontal" action="<?=$this->url('admin-settings', ['action' => $action, 'id' => $group->getGroupID()]); ?>">
+                    <? if ($group->getGroupID() != null): ?>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">ID</label>
+                            <div class="col-sm-10">
+                                <p class="form-control-static"><?=$group->getGroupID(); ?></p>
+                            </div>
+                        </div>
+                    <? endif; ?>
+                    <div class="form-group<?=($error && isset($arrErrorsTexts['name'])) ? ' has-error' : ''; ?>">
+                        <label for="name" class="col-sm-2 control-label">Название</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="name" name="name" value="<?=$group->getName(); ?>">
+                            <? if ($error && isset($arrErrorsTexts['name'])): ?>
+                                <label class="error"><?=$arrErrorsTexts['name']?></label>
+                            <? endif; ?>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"></span> Сохранить</button>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                </form>
+            </div>
+        </div>
+        <? endif; ?>
+    </div>
+</div>

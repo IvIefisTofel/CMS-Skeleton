@@ -1,0 +1,13 @@
+<? if ($form) {
+    $this->headLink()->appendStylesheet($this->basePath('/css/form-pure.min.css'));
+    $this->headScript()->appendFile($this->basePath('/js/forms.js'));
+} ?>
+<div class="return-admin">
+    <a href="<?=$this->url('admin-pages'); ?>"><i class="fa fa-reply"></i> Назад</a>
+</div>
+<?
+$content = $this->page->getContent();
+$content = str_replace(['{server_url}', '{base_url}'], [$this->serverUrl(), ($this->basePath() == null) ? '/' : $this->basePath()], $content);
+?>
+<?=$content; ?>
+<? if ($form) echo $form; ?>

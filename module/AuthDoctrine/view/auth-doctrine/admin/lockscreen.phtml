@@ -1,0 +1,75 @@
+<? /* @var $user \Users\Entity\User */ $user = $this->identity(); ?>
+<html lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>INSPINIA Admin | Экран Блокировки</title>
+
+    <?=$this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath('/admin/img/favicon.ico')))
+        ->appendStylesheet($this->basePath('css/login-core.css'))
+    //        ->appendStylesheet($this->basePath('css/bootstrap.min.css'))
+    //        ->appendStylesheet($this->basePath('css/font-awesome.min.css'))
+    //        ->appendStylesheet($this->basePath('admin/css/plugins/toastr/toastr.css'))
+    //        ->appendStylesheet($this->basePath('admin/css/animate.css'))
+    //        ->appendStylesheet($this->basePath('admin/css/inspinia.css'))
+    ?>
+    <style>@import url("http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&amp;lang=en");</style>
+</head>
+
+<body class="gray-bg">
+
+<div class="lock-word animated fadeInDown">
+    <span class="first-word">LOCKED</span><span>SCREEN</span>
+</div>
+<div class="middle-box text-center lockscreen animated fadeInDown">
+    <div>
+        <div class="m-b-md">
+            <img alt="image" class="img-circle circle-border" src="<?=$user->getGrAvatar(140); ?>">
+        </div>
+        <h3><?=$user->getUserFullName(); ?></h3>
+
+        <form class="m-t" role="form" method="post" action="<?=$this->url('lock-screen'); ?>">
+            <? if ($uri != null): ?>
+                <input type="hidden" name="lockScreenRedirect" value="<?=$uri; ?>">
+            <? endif; ?>
+            <div class="form-group">
+                <input name="lockScreenPass" type="password" class="form-control" placeholder="******" required="required">
+            </div>
+            <button type="submit" class="btn btn-primary block full-width">Разблокировать</button>
+        </form>
+    </div>
+</div>
+<div id="LitLSExit" class="animated fadeInLeftBig" >
+    <a href="<?=$this->url('home'); ?>">
+        <i class="fa fa-reply "></i> На сайт
+    </a>
+    <a href="<?=$this->url('logout');?>">
+        <i class="fa fa-sign-out"></i> Выход
+    </a>
+</div>
+
+<?=$this->headScript()
+    ->prependFile($this->basePath('js/login-core.js'))
+//    ->prependFile($this->basePath('js/bootstrap.min.js'))
+//    ->prependFile($this->basePath('js/jquery.min.js'))
+//    ->prependFile($this->basePath('admin/js/plugins/toastr/toastr.min.js'))
+?>
+<? if ($error): ?>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            setTimeout(function () {
+                toastr.options = {
+                    closeButton: true,
+                    showDuration: "slow",
+                    hideDuration: "slow",
+                    timeOut: 10000,
+                    extendedTimeOut: 10000
+                };
+                toastr.error("Не верный пароль", 'Ошибка авторизации');
+
+            }, 1000);
+        });
+    </script>
+<? endif; ?>
+
+</body>
+</html>

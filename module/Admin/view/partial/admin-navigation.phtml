@@ -1,0 +1,70 @@
+<?php
+/* @var $container Zend\Navigation\Navigation */
+/* @var $page Zend\Navigation\Page\Mvc */
+?>
+<? foreach ($container as $page): ?>
+    <? if (!$this->navigation()->accept($page)) continue; ?>
+    <? $hasChildren = $page->hasPages() ?>
+    <? if (!$hasChildren): ?>
+        <li<? if ($page->isActive()) echo ' class="active"' ?>>
+            <a href="<?=$page->getHref(); ?>"<?=($page->getTarget() != "") ? ' target="' . $page->getTarget() . '"' : ''; ?>>
+                <? if($page->get('icon') != null) echo '<i class="' . $page->get('icon') . '"></i>' ?>
+                <span><?=$this->escapeHtml($page->getLabel()); ?></span>
+            </a>
+        </li>
+    <?php else: ?>
+        <?php
+        //check if access is allowed at least one item
+        $access = false;
+        foreach ($page->getPages() as $child) {
+            if ($this->navigation()->accept($child) && $child->get("separator") !== true) {
+                $access = true;
+            }
+        }
+        if ($access) :
+            ?>
+            <li<? if ($page->isActive(true)) echo ' class="active"' ?>>
+                <a href="#" onclick="event.preventDefault()"<?=($page->getTarget() != "") ? ' target="' . $page->getTarget() . '"' : ''; ?>>
+                    <? if($page->get('icon') != null) echo '<i class="' . $page->get('icon') . '"></i>' ?>
+                    <span><?=$this->escapeHtml($page->getLabel()); ?></span>
+                    <span class="fa arrow"></span>
+                </a>
+                <? $pages = $page->getPages(); ?>
+                <ul class="nav nav-second-level collapse<? if ($page->isActive(true)) echo ' in' ?>">
+                    <? foreach ($pages as $child): ?>
+                        <? if (!$this->navigation()->accept($child)) continue; ?>
+                        <? $hasChildren = $child->hasPages() ?>
+                        <? if (!$hasChildren): ?>
+                            <li<?php if ($child->isActive()) echo ' class="active"' ?>>
+                                <a href="<?php echo $child->getHref() ?>"<?=($child->getTarget() != "") ? ' target="' . $child->getTarget() . '"' : ''; ?>>
+                                    <?=($child->get('icon') != null) ? '<i class="' . $child->get('icon') . '"></i>' : '' ?>
+                                    <?=$this->escapeHtml($child->getLabel()); ?>
+                                </a>
+                            </li>
+                        <? else: ?>
+                            <li<?php if ($child->isActive()) echo ' class="active"' ?>>
+                                <a href="#" onclick="event.preventDefault()"<?=($child->getTarget() != "") ? ' target="' . $child->getTarget() . '"' : ''; ?>>
+                                    <?=($child->get('icon') != null) ? '<i class="' . $child->get('icon') . '"></i>' : '' ?>
+                                    <?=$this->escapeHtml($child->getLabel()); ?>
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </a>
+                                <? $subPages = $child->getPages(); ?>
+                                <ul class="nav nav-third-level">
+                                    <? foreach ($subPages as $subChild): ?>
+                                        <? if (!$this->navigation()->accept($subChild)) continue; ?>
+                                        <li<?php if ($subChild->isActive()) echo ' class="active"' ?>>
+                                            <a href="<?php echo $subChild->getHref() ?>"<?=($subChild->getTarget() != "") ? ' target="' . $subChild->getTarget() . '"' : ''; ?>>
+                                                <?=($subChild->get('icon') != null) ? '<i class="' . $subChild->get('icon') . '"></i>' : '' ?>
+                                                <?=$this->escapeHtml($subChild->getLabel()); ?>
+                                            </a>
+                                        </li>
+                                    <?php endforeach ?>
+                                </ul>
+                            </li>
+                        <? endif; ?>
+                    <?php endforeach ?>
+                </ul>
+            </li>
+        <?php endif; ?>
+    <?php endif ?>
+<?php endforeach ?>

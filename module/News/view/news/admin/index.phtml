@@ -1,0 +1,59 @@
+<?
+$this->headTitle('Новости');
+?>
+<div class="ibox">
+    <div class="ibox-title">
+        <h5>Статические страницы</h5>
+        <div class="ibox-tools">
+            <a href="<?=$this->url('admin-news', ['action' => 'addnews'])?>" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Создать новую страницу</a>
+        </div>
+    </div>
+    <div class="ibox-content">
+        <div class="project-list">
+            <table class="table table-hover">
+                <tbody>
+                <? if (count($arrNews) == 0): ?>
+                    <tr>
+                        <td style="text-align: center;">
+                            Ни одной страницы пока не созданно.
+                        </td>
+                    </tr>
+                <? else: ?>
+                    <? /* @var $news \News\Entity\News */ ?>
+                    <? foreach ($arrNews as $news): ?>
+                        <tr>
+                            <td>
+                                <? if ($news->getActive()) {
+                                    $status = 'Активна';
+                                    $activeClass = 'label-primary';
+                                } else {
+                                    $status = 'Не активна';
+                                    $activeClass = 'label-default';
+                                }
+                                ?>
+                                <span class="label <?=$activeClass?>"><?=$status?></span>
+                            </td>
+                            <td class="project-title">
+                                <h4><?=$news->getName(); ?></h4>
+                                <small>Создана <?=date_format($news->getDate(), 'd.m.Y  H:i:s'); ?></small>
+                            </td>
+                            <td class="project-alias">
+                                <b>Адрес страницы:</b><br>
+                                <small><a href="<?=$this->url('news', ['alias' => $news->getAlias()]);?>" target="_blank"><?=$this->url('news', ['alias' => $news->getAlias()]);?></a></small>
+                            </td>
+                            <td class="project-content-preview">
+                                <small><?=(mb_strlen($news->getContentPreview()) > 432) ? mb_substr(strip_tags($news->getContentPreview()), 0, 432) . '.....' : strip_tags($news->getContentPreview()); ?></small>
+                            </td>
+                            <td class="project-actions">
+                                <a href="<?=$this->url('admin-news', ['action' => 'newspreview', 'id' => $news->getId()])?>" class="btn btn-info btn-sm"><i class="fa fa-eye"></i> Предпросмотр</a>
+                                <a href="<?=$this->url('admin-news', ['action' => 'editnews', 'id' => $news->getId()])?>" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i> Редактировать</a>
+                                <a href="<?=$this->url('admin-news', ['action' => 'deletenews', 'id' => $news->getId()])?>" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Удалить</a>
+                            </td>
+                        </tr>
+                    <? endforeach; ?>
+                <? endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

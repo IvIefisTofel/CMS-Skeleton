@@ -1,0 +1,8 @@
+<? /* @var $setting \Settings\Entity\Settings */ ?>
+<div>
+    <button class="ajaxLoad btn btn-sm btn-primary pull-right" type="submit" style="margin: 0;">Сохранить</button>
+    <label>
+        <input type="checkbox" class="i-checks" id="<?=$setting->getName(); ?>" name="<?=$setting->getName(); ?>" value="1"<?=($setting->getValue()) ? ' checked="checked"' : ''; ?>>
+        <?=$setting->getHeaderName(); ?>
+    </label>
+</div>

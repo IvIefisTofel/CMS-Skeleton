@@ -1,0 +1,53 @@
+<?
+$params = (isset($_SERVER['REDIRECT_QUERY_STRING'])) ? '?' . $_SERVER['REDIRECT_QUERY_STRING'] : '';
+$routeMatch = $this->getHelperPluginManager()->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch();
+?>
+<? if ($this->pageCount > 1): ?>
+    <div class="btn-group pull-right">
+        <!-- Previous page link -->
+        <? if (isset($this->previous)): ?>
+            <a href="<?=$this->url($routeMatch->getMatchedRouteName(), [
+                'controller' => $routeMatch->getParams()['__CONTROLLER__'],
+                'action' => $routeMatch->getParams()['action'],
+            ]) . $params; ?>" class="btn btn-white btn-sm"><i class="fa fa-angle-double-left"></i></a>
+            <a href="<?=$this->url($routeMatch->getMatchedRouteName(), [
+                'controller' => $routeMatch->getParams()['__CONTROLLER__'],
+                'action' => $routeMatch->getParams()['action'],
+                'page' => ($this->previous == $this->first) ? null : $this->previous,
+            ]) . $params; ?>" class="btn btn-white btn-sm"><i class="fa fa-angle-left"></i></a>
+        <? else: ?>
+            <a class="btn btn-white btn-sm" disabled="disabled"><i class="fa fa-angle-double-left"></i></a>
+            <a class="btn btn-white btn-sm" disabled="disabled"><i class="fa fa-angle-left"></i></a>
+        <? endif; ?>
+
+        <!-- Numbered page links -->
+        <? foreach ($this->pagesInRange as $page): ?>
+            <? if ($page != $this->current): ?>
+                <a href="<?=$this->url($routeMatch->getMatchedRouteName(), [
+                    'controller' => $routeMatch->getParams()['__CONTROLLER__'],
+                    'action' => $routeMatch->getParams()['action'],
+                    'page' => $page
+                ]) . $params; ?>" class="btn btn-white btn-sm"><?=$page; ?></a>
+            <? else: ?>
+                <a class="btn btn-white btn-sm active"><?=$page; ?></a>
+            <? endif; ?>
+        <? endforeach; ?>
+
+        <!-- Next page link -->
+        <? if (isset($this->next)): ?>
+            <a href="<?=$this->url($routeMatch->getMatchedRouteName(), [
+                'controller' => $routeMatch->getParams()['__CONTROLLER__'],
+                'action' => $routeMatch->getParams()['action'],
+                'page' => $this->next
+            ]) . $params; ?>" class="btn btn-white btn-sm"><i class="fa fa-angle-right"></i></a>
+            <a href="<?=$this->url($routeMatch->getMatchedRouteName(), [
+                'controller' => $routeMatch->getParams()['__CONTROLLER__'],
+                'action' => $routeMatch->getParams()['action'],
+                'page' => $this->last
+            ]) . $params; ?>" class="btn btn-white btn-sm"><i class="fa fa-angle-double-right"></i></a>
+        <? else: ?>
+            <a class="btn btn-white btn-sm" disabled="disabled"><i class="fa fa-angle-right"></i></a>
+            <a class="btn btn-white btn-sm" disabled="disabled"><i class="fa fa-angle-double-right"></i></a>
+        <? endif; ?>
+    </div>
+<? endif; ?>

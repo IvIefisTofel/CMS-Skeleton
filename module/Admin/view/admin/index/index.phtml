@@ -1,0 +1,107 @@
+<?
+$this->headLink()->appendStylesheet($this->basePath('admin/css/plugins/morris/morris-0.4.3.min.css'));
+$this->headScript()
+    ->appendFile($this->basePath('admin/js/plugins/morris/raphael-2.1.0.min.js'))
+    ->appendFile($this->basePath('admin/js/plugins/morris/morris.js'))
+    ->appendFile($this->basePath('admin/js/morris-init.js'));
+?>
+<div class="row">
+    <? $newMessages = $this->newMessages(); ?>
+    <div class="col-lg-3">
+        <div class="widget style1 lazur-bg">
+            <div class="row">
+                <div class="col-xs-4">
+                    <i class="fa fa-envelope-o fa-5x"></i>
+                </div>
+                <div class="col-xs-8 text-right">
+                    <span>Новых сообщений</span>
+                    <h2 class="font-bold"><?=$newMessages; ?></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3"></div>
+    <div class="col-lg-3"></div>
+    <? if ($this->getSiteParam('yandex_metrika_enabled') && ($json != null) && (count($json['data']) > 0) &&
+        ($json['data'][$json['rows'] - 1]['date'] == date_format(new \DateTime(), 'Ymd'))):?>
+        <div class="col-lg-3">
+            <div class="widget style1 red-bg">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-eye fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span id="testForClick">Просмотров страниц сегодня</span>
+                        <h2 class="font-bold"><?=$json['data'][$json['rows'] - 1]['page_views']; ?></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <? endif; ?>
+</div>
+<? if ($this->getSiteParam('yandex_metrika_enabled') && $json != null && (count($json['data']) > 0)): ?>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <?
+                    $dateStart = new \DateTime($json['date1']);
+                    $dateEnd = new \DateTime($json['date2']);
+                    ?>
+                    <h5>Статистика посещений за месяц (<?=date_format($dateStart, 'd.m.Y'); ?> - <?=date_format($dateEnd, 'd.m.Y'); ?>) </h5>
+
+                    <div class="ibox-tools">
+                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        <a class="close-link"><i class="fa fa-times"></i></a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div id="morris-line-chart"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?
+    $data = $json['data'];
+    $first = null;
+    if (count($data) > 0)
+        $first = array_shift($data);
+    if ($first): ?>
+    <script type="text/javascript">
+        function formatDate(d) {
+            var months = {0:' Января',1:' Февраля',2:' Марта',3:' Апреля',4:' Мая',5:' Июня',6:' Июля',
+                7:' Августа',8:' Сентября',9:' Октября',10:' Ноября',11:' Декабря'};
+            var date = new Date(d);
+            return (date.getDate() < 10 ? '0' : '') + date.getDate() + months[date.getMonth()];
+        }
+
+        var lineData = {
+            element: 'morris-line-chart',
+            data: [
+                <? $tmpDate = new \DateTime($first['date']);
+                echo '{date:"' . date_format($tmpDate, 'Y-m-d') . '", visitors:' . $first['visitors'] .
+                    ', newVisitors:' . $first['new_visitors'] . ', visits:' . $first['visits'] . '}';
+                foreach ($data as $value) {
+                    $tmpDate = new \DateTime($value['date']);
+                    echo ",\n" . '{date:"' . date_format($tmpDate, 'Y-m-d') . '", visitors:' . $value['visitors'] .
+                        ', newVisitors:' . $value['new_visitors'] . ', visits:' . $value['visits'] . '}';
+                } ?>
+            ],
+            xkey: 'date',
+            ykeys: ['visitors', 'newVisitors', 'visits'],
+            labels: ['Посетителей', 'Новых посетителей', 'Посещений'],
+            hideHover: 'auto',
+            resize: true,
+            lineColors: ['#1ab394','#23c6c8','#f8ac59'],
+            dateFormat: function(d){return formatDate(d)},
+            xLabelFormat: function(x){return formatDate(x)}
+        };
+    </script>
+    <? endif; ?>
+<? elseif (count($json['errors']) > 0): ?>
+    <script type="text/javascript">
+        <? foreach ($json['errors'] as $err): ?>
+            toastrDataArr.push({type: 'error', header: 'Яндекс.Метрика', msg: '<?=$err['text']; ?>'});
+        <? endforeach; ?>
+    </script>
+<? endif; ?>

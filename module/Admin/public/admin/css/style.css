@@ -1,0 +1,149 @@
+#ajaxLoading {
+    display: none;
+}
+#litSettingsGroup tr th:nth-of-type(1){
+    width: 30px;
+}
+#litSettingsGroup tr th:nth-of-type(3){
+    width: 125px;
+}
+#litSettingsGroup tr td{
+    vertical-align: middle;
+}
+#litSettingsGroup tr a, #litSettingsGroup tr button {
+    margin: 0;
+}
+#litSettingsGroup tr td:nth-of-type(2){
+    text-align: center;
+    padding: 0;
+}
+#litSettingsMenu tr th:nth-of-type(1) {
+    width: 45%;
+}
+#litSettingsMenu tr th:nth-of-type(3) {
+    width: 75px;
+}
+#litSettingsMenu tr th:nth-of-type(4) {
+    width: 45px;
+}
+#litSettingsMenu tr td:nth-of-type(3) {
+    text-align: center;
+}
+.panel .panel-heading a.close-link {
+    color: white;
+    font-size: 15px;
+}
+.file.error .corner {
+    border-right: 0.6em solid #d84a59;
+    border-bottom: 0.6em solid #d84a59;
+}
+.file.error .icon {
+    background-color: #ed5565;
+}
+.file.error .icon i {
+    font-size: 60px;
+}
+.file.error .icon i,
+.file.error .icon span,
+.file.error .file-name{
+    color: white;
+}
+.file.error .file-name {
+    background-color: #d23d4d;
+    border-top: 1px solid #bb3b48;
+}
+.middle-box h1.logo-name {
+    font-size: 180px;
+    margin-bottom: 30px;
+    cursor: default;
+}
+form#login .checkbox{
+    float: left;
+}
+#LitLSExit {
+    position: absolute;
+    top: 30px;
+    right: 50px;
+}
+#LitLSExit a {
+    color: #999c9e;
+    margin-left: 15px;
+}
+.file-box {
+    position: relative;
+}
+.litControlButtons {
+    position: absolute;
+    right: 25px;
+    top: 5px;
+    z-index: 10;
+}
+.litControlButtons a {
+    position: relative;
+    width: 27px;
+    height: 27px;
+}
+.litControlButtons a i:before {
+    position: absolute;
+    top: 5px;
+    right: 7px;
+}
+.ibox .float-right {
+    text-align: right;
+}
+div.checkbox > label > div.icheckbox_square-green {
+    margin-left: -20px;
+}
+label.required-label:after {
+    content: ' *';
+    color: #ed5565;
+}
+.line-dashed {
+    margin-top: 25px;
+}
+.line-dashed:before {
+    content: '';
+    border-top: 1px dashed #e7eaec;
+    position: absolute;
+    top: -20px;
+    left: -255px;
+    right: 15px;
+}
+.line-dashed-last {
+    margin-bottom: 25px;
+}
+.line-dashed-last:after {
+    content: '';
+    border-top: 1px dashed #e7eaec;
+    position: absolute;
+    bottom: -20px;
+    left: -255px;
+    right: 15px;
+}
+.ibox-tools .btn {
+    color: #fff;
+}
+.mail-сontact {
+    width: 30%;
+}
+.mail-date {
+    width: 170px;
+}
+.mail-body pre.mail-text {
+    border: none;
+    background: #fff;
+}
+.mail-body dd {
+    -webkit-margin-start: 40px;
+}
+.navbar-top-links .dropdown-alerts {
+    width: 250px;
+}
+.mail-tools ul.dropdown-menu li button.btn {
+    width: 100%;
+    border-radius: 0;
+    padding: 3px 0;
+}
+#morris-line-chart {
+    min-height: 354px;
+}

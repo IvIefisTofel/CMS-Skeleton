@@ -1,0 +1,10 @@
+<? /* @var $setting \Settings\Entity\Settings */ ?>
+<label for="<?=$setting->getName(); ?>" class="control-label"><?=$setting->getHeaderName(); ?></label>
+<div class="row">
+    <div class="col-sm-12">
+        <textarea id="<?=$setting->getName(); ?>" name="<?=$setting->getName(); ?>" class="form-control" rows="5"><?=$setting->getValue(); ?></textarea>
+        <div class="pull-right" style="margin-top: 10px;">
+            <button class="ajaxLoad btn btn-sm btn-primary" type="submit">Сохранить</button>
+        </div>
+    </div>
+</div>

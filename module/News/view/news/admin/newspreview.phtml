@@ -1,0 +1,8 @@
+<div class="return-admin">
+    <a href="<?=$this->url('admin-news'); ?>"><i class="fa fa-reply"></i> Назад</a>
+</div>
+<?
+$content = $news->getContent();
+$content = str_replace(['{server_url}', '{base_url}'], [$this->serverUrl(), ($this->basePath() == null) ? '/' : $this->basePath()], $content);
+?>
+<?=$content; ?>

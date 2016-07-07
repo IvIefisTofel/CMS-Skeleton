@@ -1,0 +1,85 @@
+<?
+$this->headTitle('Почта');
+
+$this->headScript()->appendFile($this->basePath('admin/js/mails.js'));
+?>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="mail-box-header">
+            <?/**
+             * @todo Сделать поиск по сообщениям
+             * <form class="pull-right mail-search">
+                <div class="input-group">
+                    <input type="text" class="form-control input-sm" name="search" placeholder="Поиск сообщений">
+                    <div class="input-group-btn">
+                        <button type="submit" class="btn btn-sm btn-primary">
+                            Поиск
+                        </button>
+                    </div>
+                </div>
+            </form>*/?>
+            <h2><span class="number"><?=$paginator->getTotalItemCount(); ?></span> <?=$this->numEnding($paginator->getTotalItemCount(), ['Сообщение', 'Сообщения', 'Сообщений']); ?></h2>
+            <div class="mail-tools tooltip-demo m-t-md">
+                <?=$this->paginationControl($this->paginator, 'Sliding', 'partial/paginator'); ?>
+                <div style="display: inline-block; padding-right: 20px;">
+                    <input id="toggleAll" type="checkbox" class="i-checks">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-white btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-tags"></i>
+                        Фильтр по флагам
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <? foreach(\Emails\Entity\Email::$arrTypes as $flag): ?>
+                            <li><a href="#" class="flag" data-flag="<?=$flag['class']; ?>"><span class="label label-<?=$flag['colorClass']; ?>"><?=$flag['text']; ?></span></a></li>
+                        <? endforeach; ?>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#" class="flag" data-flag="none">Показать все</a></li>
+                    </ul>
+                </div>
+                <a href="#" class="btn btn-white btn-sm ajaxAction" data-action="setAsReaded" data-toggle="tooltip"
+                   data-href="<?=$this->url('admin-mail', ['action' => 'ajax']); ?>"
+                   data-placement="bottom" title="Отметить как прочитанные"><i class="fa fa-eye"></i></a>
+                <a href="#" class="btn btn-white btn-sm ajaxAction" data-action="delete" data-toggle="tooltip"
+                   data-href="<?=$this->url('admin-mail', ['action' => 'ajax']); ?>"
+                   data-placement="bottom" title="Удалить"><i class="fa fa-trash-o"></i></a>
+            </div>
+        </div>
+        <div class="mail-box">
+
+            <table class="table table-hover table-mail">
+                <tbody>
+                <? if ($paginator->getTotalItemCount()): ?>
+                    <? foreach($paginator as $mail): ?>
+                        <? /* @var $mail \Emails\Entity\Email */ ?>
+                        <tr class="<?=$mail->getRead() ? 'read' : 'unread'; ?>">
+                            <td class="check-mail">
+                                <input data-id="<?=$mail->getId(); ?>" type="checkbox" class="i-checks">
+                            </td>
+                            <td class="mail-сontact">
+                                <? $sender = ($mail->getSenderName() == \Emails\Entity\Email::SYSTEM_MESSAGE) ? 'Системное сообщение' : $mail->getSenderName(); ?>
+                                <a href="<?=$this->url('admin-mail', ['action' => 'message', 'id' => $mail->getId()]); ?>"><?=$sender; ?></a>
+                                <? if (count($mail->getFlags())): ?>
+                                    <div class="pull-right">
+                                        <? foreach ($mail->getFlags() as $flagId => $value): ?>
+                                            <span class="label label-<?=\Emails\Entity\Email::$arrTypes[$flagId]['colorClass'] .
+                                                ' ' . \Emails\Entity\Email::$arrTypes[$flagId]['class'];
+                                                ?>"><?=\Emails\Entity\Email::$arrTypes[$flagId]['text']; ?></span>
+                                        <? endforeach; ?>
+                                    </div>
+                                <? endif; ?>
+                            </td>
+                            <td class="mail-subject">
+                                <a href="<?=$this->url('admin-mail', ['action' => 'message', 'id' => $mail->getId()]); ?>"><?=$mail->getSubject(); ?></a>
+                            </td>
+                            <td class="mail-date text-right"><?=date_format($mail->getDate(), 'd.m.Y H:i'); ?></td>
+                        </tr>
+                    <? endforeach; ?>
+                <? else: ?>
+                    <tr><td><center><h2>Нет данных</h2></center></td></tr>
+                <? endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

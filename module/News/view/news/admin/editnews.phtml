@@ -1,0 +1,136 @@
+<?
+$title = (isset($addnews) && $addnews == true) ? 'Добавить новость' : 'Редактировать новость';
+$this->headTitle($title);
+$this->headTitle('Страницы');
+
+$this->setCurrentNavigationPage('adminPanel', 'admin-pages');
+$this->addCurrentBreadCrumb($title, isset($addnews) ? 'fa fa-plus' : 'fa fa-pencil');
+
+$this->headLink()->appendStylesheet($this->basePath('admin/css/plugins/datapicker/bootstrap-datetimepicker.min.css'));
+$this->headScript()->appendFile($this->basePath('admin/js/plugins/datapicker/moment.js'));
+$this->headScript()->appendFile($this->basePath('admin/js/plugins/datapicker/ru.js'));
+$this->headScript()->appendFile($this->basePath('admin/js/plugins/datapicker/bootstrap-datetimepicker.min.js'));
+/* @var $news \News\Entity\News */
+?>
+<? if (count($arrErrors) > 0): ?>
+    <div class="row">
+        <? foreach ($arrErrors as $msg): ?>
+            <div class="col-lg-12">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <div class="ibox-tools">
+                            <a class="close-link" data-toggle="tooltip" data-placement="top" data-original-title="Закрыть">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                        <?=$msg; ?>
+                    </div>
+                </div>
+            </div>
+        <? endforeach; ?>
+    </div>
+<? endif; ?>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5><?=$title; ?></h5>
+                <div class="ibox-tools">
+                    <a href="<?=$this->url('admin-pages'); ?>" class="btn btn-default btn-xs">
+                        <span class="glyphicon glyphicon-arrow-left"></span>
+                        Назад
+                    </a>
+                    <a class="collapse-link" data-toggle="tooltip" data-placement="top" data-original-title="Свернуть">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    <a class="close-link" data-toggle="tooltip" data-placement="top" data-original-title="Закрыть">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <form method="post" class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <h5>SEO</h5>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="seo_title" class="col-sm-2 control-label">Заголовок</label>
+                        <div class="col-sm-10">
+                            <input id="seo_title" name="seo_title" type="text" class="form-control" value="<?=$seo['seo_title']; ?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="seo_keywords" class="col-sm-2 control-label">Ключевые слова</label>
+                        <div class="col-sm-10">
+                            <input id="seo_keywords" name="seo_keywords" type="text" class="form-control" value="<?=$seo['seo_keywords']?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="seo_description" class="col-sm-2 control-label">Описание</label>
+                        <div class="col-sm-10">
+                            <input id="seo_description" name="seo_description" type="text" class="form-control" value="<?=$seo['seo_description']?>">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <h5>Параметры <i>(поля, помеченные красной звездочкой оязательные к заполнению)</i></h5>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="alias" class="col-sm-2 control-label required-label">Адрес страницы</label>
+                        <div class="col-sm-10">
+                            <input id="alias" name="alias" type="text" class="form-control" value="<?=$news->getAlias(); ?>" required="required">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label required-label">Название страницы</label>
+                        <div class="col-sm-10">
+                            <input id="name" name="name" type="text" class="form-control" value="<?=$news->getName(); ?>" required="required">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="content_preview" class="col-sm-2 control-label">Предпросмотр страницы</label>
+                        <div class="col-sm-10">
+                            <textarea id="content_preview" name="content_preview" class="form-control" rows="5"><?=$news->getContentPreview(); ?></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="content" class="col-sm-2 control-label required-label">Контент страницы</label>
+                        <div class="col-sm-10">
+                            <textarea id="content" name="content" class="form-control" rows="5" required="required"><?=$news->getContent(); ?></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="active" class="col-sm-10 col-sm-offset-2">
+                            <input id="active" name="active" type="checkbox" class="i-checks" value="1"<?=$news->getActive() == true ? ' checked="checked"' : ''?>>
+                            Активность
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date" class="col-sm-2 control-label required-label">Дата</label>
+                        <div class="col-sm-10">
+                            <div class="col-sm-3 input-group datetime">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                <input id="date" name="date" type="text" class="form-control" value="<?=date_format($news->getDate(), 'd.m.Y H:i'); ?>" required="required">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button type="submit" class="btn btn-primary">
+                                <span class="glyphicon glyphicon-ok"></span>
+                                Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

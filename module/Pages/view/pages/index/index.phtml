@@ -1,0 +1,20 @@
+<?
+if (isset($seo['seo_title']) && $seo['seo_title'] != null)
+    $this->headTitle($seo['seo_title']);
+if (isset($seo['seo_keywords']) && $seo['seo_keywords'] != null)
+    $this->headMeta()->appendName('keywords', $seo['seo_keywords']);
+if (isset($seo['seo_description']) && $seo['seo_description'] != null)
+    $this->headMeta()->appendName('description', $seo['seo_description']);
+
+/* @var $form string */
+if ($form) {
+    $this->headLink()->appendStylesheet($this->basePath('/css/form-pure.min.css'));
+    $this->headScript()->appendFile($this->basePath('/js/forms.js'));
+}
+
+/* @var $page \Pages\Entity\Pages */
+$content = $page->getContent();
+$content = str_replace(['{server_url}', '{base_url}'], [$this->serverUrl(), ($this->basePath() == null) ? '/' : $this->basePath()], $content);
+?>
+<?=$content; ?>
+<? if ($form) echo $form; ?>
