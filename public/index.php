@@ -1,13 +1,17 @@
 <?php
 /**
- * This makes our life easier when dealing with paths. Everything is relative
- * to the admin root now.
+ * Display all errors when APPLICATION_ENV is development.
  */
 if (getenv('APP_ENV') != 'production') {
     ini_set('error_reporting', E_ALL);
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
 }
+
+/**
+ * This makes our life easier when dealing with paths. Everything is relative
+ * to the admin root now.
+ */
 chdir(dirname(__DIR__));
 
 // Decline static file requests back to the PHP built-in webserver
